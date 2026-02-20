@@ -1,20 +1,20 @@
 import express from "express";
-import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cors from "cors";
+import connectDB from "./config/db.js";
 import User from "./models/User.js";
+
 dotenv.config();
+connectDB(); // or replace with mongoose.connect(process.env.MONGO_URI)
 
 const app = express();
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB Connected ✅"))
-  .catch((err) => console.log(err));
+app.use(cors());
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("Server is running 🚀");
 });
-
-app.use(express.json());
 
 app.post("/create-user", async (req, res) => {
   try {
@@ -25,8 +25,7 @@ app.post("/create-user", async (req, res) => {
   }
 });
 
-const PORT = 8000;
-
+const PORT = 8000; // choose 5000 if you prefer
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
